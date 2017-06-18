@@ -19,7 +19,7 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.9.2",
+    "polymer": "Polymer/polymer#1.9.2",
     "webcomponentsjs": "^0.7.24",
     "google-map": "GoogleWebComponents/google-map#^1.2.0",
     "geo-location": "ebidel/geo-location#^1.0.6",
