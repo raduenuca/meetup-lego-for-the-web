@@ -1,0 +1,143 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/google-map/google-map.html">
+<link rel="import" href="../bower_components/google-map/google-map-directions.html">
+<link rel="import" href="../bower_components/google-map/google-map-marker.html">
+<link rel="import" href="../bower_components/geo-location/geo-location.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="atms-in-romania">
+    <template>
+        <style>
+            google-map {
+                @apply --layout-fit;
+            }
+
+            paper-tabs {
+                @apply --layout-fixed-left;
+                --paper-tabs-selection-bar-color: #4271F4;
+                background: #ffffff;
+            }
+
+            paper-tab {
+                --paper-tab-ink: #BBDEFB;
+            }
+
+            paper-tab.iron-selected {
+                background: rgb(66, 113, 244);
+                color: #ffffff;
+            }
+
+            paper-tab iron-icon {
+                margin-right: 10px;
+            }
+        </style>
+
+        <iron-ajax auto url="../data/locations.json" on-response="handleResponse"></iron-ajax>
+
+        <geo-location watch-pos high-accuracy latitude="{{lat}}" longitude="{{lng}}"></geo-location>
+
+        <google-map-directions
+                map="[[map]]" api-key="[[apiKey]]"
+                start-address="[[startAddress]]" end-address="[[endAddress]]"
+                travel-mode="[[travelMode]]" renderer-options="[[renderOptions]]" on-response-changed="computeDistance">
+        </google-map-directions>
+
+        <google-map
+                api-key="[[apiKey]]" map="{{map}}"
+                latitude="[[lat]]" longitude="[[lng]]"
+                disable-default-ui zoom="15">
+            <google-map-marker
+                    latitude="[[lat]]"
+                    longitude="[[lng]]"
+                    icon="images/my-location.png">
+                <h2>You are here</h2>
+            </google-map-marker>
+            <template is="dom-repeat" items="[[locations]]" as="atm" filter="isIngAtm">
+                <google-map-marker
+                        latitude="[[atm.map.latitude]]"
+                        longitude="[[atm.map.longitude]]"
+                        icon="images/pin.png"
+                        click-events on-google-map-marker-click="showDirections">
+                    <h2>[[atm.name]]</h2>
+                    <p>[[atm.schedule]]</p>
+                </google-map-marker>
+            </template>
+        </google-map>
+
+        <paper-tabs attr-for-selected="label" selected="{{travelMode}}">
+            <paper-tab label="DRIVING">
+                <iron-icon icon="maps:directions-car"></iron-icon>
+                <span>DRIVING</span>
+            </paper-tab>
+            <paper-tab label="WALKING">
+                <iron-icon icon="maps:directions-walk"></iron-icon>
+                <span>WALKING</span>
+            </paper-tab>
+            <paper-tab label="BICYCLING">
+                <iron-icon icon="maps:directions-bike"></iron-icon>
+                <span>BICYCLING</span>
+            </paper-tab>
+            <paper-tab label="TRANSIT">
+                <iron-icon icon="maps:directions-transit"></iron-icon>
+                <span>TRANSIT</span>
+            </paper-tab>
+        </paper-tabs>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'atms-in-romania',
+
+            properties: {
+                apiKey: String,
+
+                renderOptions: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            suppressMarkers: true,
+                            preserveViewport: false
+                        };
+                    }
+                },
+
+                startAddress: {
+                    type: Object,
+                    computed: 'computeStartAddress(lat, lng)'
+                },
+
+                travelMode: {
+                    type: String,
+                    value: 'DRIVING'
+                }
+            },
+
+            handleResponse: function (evt, xhr) {
+                this.locations = xhr.response.city.reduce(function (locations, city) {
+                    return locations.concat(city.location);
+                }, []);
+            },
+
+            isIngAtm: function (location) {
+                return location && location.type !== 'ATM non-ING';
+            },
+
+            computeStartAddress: function (lat, lng) {
+                return {lat: lat, lng: lng};
+            },
+
+            showDirections: function (event) {
+                this.endAddress = {lat: parseFloat(event.target.latitude), lng: parseFloat(event.target.longitude)};
+            },
+
+            computeDistance: function (event) {
+                console.log(event.detail.value.routes[0].legs[0].distance.text);
+            }
+        });
+    </script>
+</dom-module>

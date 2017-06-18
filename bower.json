@@ -1,0 +1,32 @@
+{
+  "name": "bower.json",
+  "verion": "0.0.1",
+  "description": "Code for Polymer - Lego for the Web meetup",
+  "main": "index.html",
+  "homepage": "https://github.com/raduenuca/meetup-lego-for-the-web",
+  "authors": [
+    "Radu Enuca <raduenuca@gmail.com>"
+  ],
+  "keywords": [
+    "polymer"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.9.2",
+    "webcomponentsjs": "^0.7.24",
+    "google-map": "GoogleWebComponents/google-map#^1.2.0",
+    "geo-location": "ebidel/geo-location#^1.0.6",
+    "iron-ajax": "PolymerElements/iron-ajax#^2.0.2",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.0",
+    "paper-tabs": "PolymerElements/paper-tabs#^2.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^2.0.1",
+    "iron-icon": "PolymerElements/iron-icon#^2.0.0"
+  }
+}

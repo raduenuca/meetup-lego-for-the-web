@@ -1,0 +1,22 @@
+{
+  "name": "meetup-lego-for-the-web",
+  "version": "0.0.1",
+  "description": "Code for Polymer - Lego for the Web meetup",
+  "main": "index.html",
+  "homepage": "https://github.com/raduenuca/meetup-lego-for-the-web",
+  "author": "Radu Enuca <raduenuca@gmail.com>",
+  "keywords": [
+    "polymer"
+  ],
+  "scripts": {
+    "start": "polymer serve -o",
+    "deploy": "polymer build && firebase deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raduenuca/meetup-lego-for-the-web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/raduenuca/meetup-lego-for-the-web/issues"
+  }
+}
